@@ -23,12 +23,6 @@
             "XD\\Twitter\\": "src/"
         }
     },
-	"extra": {
-		"installer-name": "twitter",
-		"branch-alias": {
-			"dev-master": "4.x-dev"
-		}
-	},
 	"suggest": {
 		"silverstripe/widgets": "Put your tweets in your blog or page sidebar!"
 	},
