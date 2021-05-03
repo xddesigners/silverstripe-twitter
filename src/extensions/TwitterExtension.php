@@ -91,6 +91,29 @@ class TwitterExtension extends Extension
      * @param integer $count Number of tweets
      * @return ArrayList List of tweets
      */
+    public function List($listID, $count = 10)
+    {
+        // Check that the twitter user is configured
+        if (empty($listID)) return null;
+        if (!$this->twitterService) return null;
+
+        if( SiteConfig::current_site_config()->TwitterCached ) {
+            $cached = new CachedTwitterService($this->twitterService);
+            return $cached->getList($listID, $count);
+        }
+
+        return $this->twitterService->getList($listID, $count);
+    }
+
+    /**
+     * Retrieves (up to) the last $count tweets from $user.
+     *
+     * Note: Actual returned number may be less than 10 due to reasons
+     *
+     * @param string $user Username to search for
+     * @param integer $count Number of tweets
+     * @return ArrayList List of tweets
+     */
     public function LatestTweetsUser($user, $count = 10)
     {
         // Check that the twitter user is configured

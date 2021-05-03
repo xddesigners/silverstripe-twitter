@@ -45,6 +45,24 @@ class CachedTwitterService implements ITwitterService
         return $result;
     }
 
+    public function getList($listID, $count)
+    {
+        // Init caching
+        $cacheKey = "getList_{$listID}_{$count}";
+        $cache = Injector::inst()->get(CacheInterface::class . '.cachedTwitterService');
+
+        // Return cached value, if available
+        if ($rawResult = $cache->get($cacheKey)) {
+            return unserialize($rawResult);
+        }
+
+        // Save and return
+        $result = $this->cachedService->getList($listID, $count);
+        $cache->set($cacheKey, serialize($result), Config::inst()->get('cachedTwitterService', 'lifetime'));
+
+        return $result;
+    }
+
     /**
      * get favourite tweets associated with the user.
      * */

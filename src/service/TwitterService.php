@@ -133,6 +133,38 @@ class TwitterService implements ITwitterService
     }
 
     /**
+     * get list by using the list_id.
+     * @param string $listID
+     * @param int $count
+     * @return array|null
+     */
+    public function getList($listID, $count)
+    {
+        if (!empty($listID)) {
+            // Call rest api
+            $arguments = [
+                'list_id' => $listID,
+                'count' => $count,
+                'include_rts' => true,
+                'tweet_mode' => 'extended'
+            ];
+            $connection = $this->getConnection();
+            $response = $connection->get('lists/statuses', $arguments);
+
+            // Parse all tweets
+            $tweets = ArrayList::create();
+            if ($response && is_array($response)) {
+                foreach ($response as $tweet) {
+                    $tweets->push(new Tweet($tweet));
+                }
+            }
+        }
+
+        return $tweets;
+    }
+
+
+    /**
      * Calculate the time ago in days, hours, whichever is the most significant
      *
      * @param integer $time Input time as a timestamp
