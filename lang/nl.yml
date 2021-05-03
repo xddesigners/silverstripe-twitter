@@ -1,0 +1,18 @@
+nl:
+  TwitterSiteConfig:
+    FIELD_TWITTER_USERNAME: Twitter Gebruikersnaam
+    FIELD_TWITTER_USERNAME_DESCRIPTION: Leeg laten om Twitter te disabelen
+  TwitterWidget:
+    WIDGETTITLE: Twitter Feed
+    CMSTITLE: Twitter Feed
+    DESCRIPTION: Toont tweets van site Twitter account in de sidebar.
+    FIELD_TITLE: Titel
+    FIELD_TWEET_COUNT: Aantal Tweets
+  SearchTwitterWidget:
+    CMSTITLE: Twitter Search Feed
+    DESCRIPTION: Toon tweets die gevonden worden bij een zoekopdracht in de sidebar
+    FIELD_QUERY: Query
+  UserTwitterWidget:
+    CMSTITLE: Twitter User Feed
+    DESCRIPTION: Toon tweets van opgegeven gebruiker in in de sidebar. 
+    FIELD_USER: Gebruiker

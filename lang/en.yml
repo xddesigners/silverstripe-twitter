@@ -1,0 +1,22 @@
+en:
+  TwitterSiteConfig:
+    FIELD_TWITTER_USERNAME: Twitter Username
+    FIELD_CONSUMER_KEY: Consumer Key
+    FIELD_CONSUMER_SECRET: Consumer Secret
+    FIELD_ACCESS_TOKEN: Access Token
+    FIELD_ACCESS_SECRET: Access Secret
+    FIELD_TWITTER_USERNAME_DESCRIPTION: Leave blank to disable twitter
+  TwitterWidget:
+    WIDGETTITLE: Twitter Feed
+    CMSTITLE: Twitter Feed
+    DESCRIPTION: Shows twitter posts in the sidebar.
+    FIELD_TITLE: Title
+    FIELD_TWEET_COUNT: Tweet count
+  SearchTwitterWidget:
+    CMSTITLE: Twitter Search Feed
+    DESCRIPTION: Shows the searched twitter posts in the sidebar.
+    FIELD_QUERY: Query
+  UserTwitterWidget:
+    CMSTITLE: Twitter User Feed
+    DESCRIPTION: Shows the twitter posts from a user in the sidebar.
+    FIELD_USER: User
