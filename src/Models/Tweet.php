@@ -14,6 +14,7 @@ class Tweet extends ViewableData
 {
 
     private $tweet;
+    private $isRetweet = false;
 
     public function __construct($tweet = false)
     {
@@ -25,6 +26,14 @@ class Tweet extends ViewableData
     public function setTweet($tweet)
     {
         $this->tweet = $tweet;
+    }
+
+    public function setIsRetweet($status=true){
+        $this->isRetweet = $status;
+    }
+
+    public function getIsRetweet(){
+        return $this->isRetweet;
     }
 
     public function getTweet()
@@ -117,6 +126,14 @@ class Tweet extends ViewableData
         return (int) $this->tweet->retweet_count;
     }
 
+    public function getRetweeted(){
+        if( isset( $this->tweet->retweeted_status ) ){
+            $retweet = new Tweet($this->tweet->retweeted_status);
+            $retweet->setIsRetweet();
+            return $retweet;
+        }
+    }
+
     /**
      * Inject a hyperlink into the body of a tweet
      *
@@ -159,7 +176,7 @@ class Tweet extends ViewableData
 
         // Inject a+image tag at the last token position
         $tokens[$endPos] = sprintf(
-            "<a href='%s' title='%s'><img src='%s' width='%s' height='%s' target='_blank' /></a>",
+            "<a href='%s' title='%s'><img class='tweet__image' src='%s' width='%s' height='%s' target='_blank' /></a>",
             Convert::raw2att($entity->url),
             Convert::raw2att($entity->display_url),
             Convert::raw2att($entity->{"media_url$https"}),
