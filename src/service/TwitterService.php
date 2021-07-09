@@ -3,6 +3,7 @@
 namespace XD\Twitter\Services;
 
 use Abraham\TwitterOAuth\TwitterOAuth;
+use Exception;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\SiteConfig\SiteConfig;
 use XD\Twitter\Models\Tweet;
@@ -60,18 +61,24 @@ class TwitterService implements ITwitterService
             'tweet_mode' => 'extended'
         ];
 
-        $connection = $this->getConnection();
-        $response = $connection->get('statuses/user_timeline', $arguments);
-
-        // Parse all tweets
-        $tweets = ArrayList::create();
-        if ($response && is_array($response)) {
-            foreach ($response as $tweet) {
-                $tweets->push(new Tweet($tweet));
+        try {
+            $connection = $this->getConnection();
+            $response = $connection->get('statuses/user_timeline', $arguments);
+    
+            // Parse all tweets
+            $tweets = ArrayList::create();
+            if ($response && is_array($response)) {
+                foreach ($response as $tweet) {
+                    $tweets->push(new Tweet($tweet));
+                }
             }
+    
+            return $tweets;
+        } catch (Exception $e) {
+            // soft fail the twitter timeout exception
         }
-
-        return $tweets;
+        
+        return null;
     }
 
     /**
