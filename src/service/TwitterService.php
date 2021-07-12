@@ -46,22 +46,21 @@ class TwitterService implements ITwitterService
 
     public function getTweets($user, $count)
     {
-
         // Check user
         if (empty($user)) {
             return null;
         }
 
         // Call rest api
-        $arguments = [
-            'screen_name' => $user,
-            'count' => $count,
-            'include_rts' => SiteConfig::current_site_config()->TwitterIncludeRTs,
-            'exclude_replies' => SiteConfig::current_site_config()->TwitterExcludeReplies,
-            'tweet_mode' => 'extended'
-        ];
-
         try {
+            $arguments = [
+                'screen_name' => $user,
+                'count' => $count,
+                'include_rts' => SiteConfig::current_site_config()->TwitterIncludeRTs,
+                'exclude_replies' => SiteConfig::current_site_config()->TwitterExcludeReplies,
+                'tweet_mode' => 'extended'
+            ];
+
             $connection = $this->getConnection();
             $response = $connection->get('statuses/user_timeline', $arguments);
     
@@ -95,48 +94,62 @@ class TwitterService implements ITwitterService
         }
 
         // Call rest api
-        $arguments = [
-            'screen_name' => $user,
-            'count' => $count,
-            'tweet_mode' => 'extended'
-        ];
-        $connection = $this->getConnection();
-        $response = $connection->get('favorites/list', $arguments);
+        try {
+            $arguments = [
+                'screen_name' => $user,
+                'count' => $count,
+                'tweet_mode' => 'extended'
+            ];
 
-        // Parse all tweets
-        $tweets = ArrayList::create();
-        if ($response && is_array($response)) {
-            foreach ($response as $tweet) {
-                $tweets->push(new Tweet($tweet));
+            $connection = $this->getConnection();
+            $response = $connection->get('favorites/list', $arguments);
+
+            // Parse all tweets
+            $tweets = ArrayList::create();
+            if ($response && is_array($response)) {
+                foreach ($response as $tweet) {
+                    $tweets->push(new Tweet($tweet));
+                }
             }
+
+            return $tweets;
+        } catch (Exception $e) {
+            // soft fail the twitter timeout exception
         }
 
-        return $tweets;
+        return null;
     }
 
     public function searchTweets($query, $count)
     {
         if (!empty($query)) {
             // Call rest api
-            $arguments = [
-                'q' => (string)$query,
-                'count' => $count,
-                'include_rts' => true,
-                'tweet_mode' => 'extended'
-            ];
-            $connection = $this->getConnection();
-            $response = $connection->get('search/tweets', $arguments);
+            try {
+                $arguments = [
+                    'q' => (string)$query,
+                    'count' => $count,
+                    'include_rts' => true,
+                    'tweet_mode' => 'extended'
+                ];
 
-            // Parse all tweets
-            $tweets = ArrayList::create();
-            if ($response) {
-                foreach ($response->statuses as $tweet) {
-                    $tweets->push(new Tweet($tweet));
+                $connection = $this->getConnection();
+                $response = $connection->get('search/tweets', $arguments);
+    
+                // Parse all tweets
+                $tweets = ArrayList::create();
+                if ($response) {
+                    foreach ($response->statuses as $tweet) {
+                        $tweets->push(new Tweet($tweet));
+                    }
                 }
+
+                return $tweets;
+            } catch (Exception $e) {
+                // soft fail the twitter timeout exception
             }
         }
 
-        return $tweets;
+        return null;
     }
 
     /**
@@ -149,25 +162,31 @@ class TwitterService implements ITwitterService
     {
         if (!empty($listID)) {
             // Call rest api
-            $arguments = [
-                'list_id' => $listID,
-                'count' => $count,
-                'include_rts' => true,
-                'tweet_mode' => 'extended'
-            ];
-            $connection = $this->getConnection();
-            $response = $connection->get('lists/statuses', $arguments);
+            try {
+                $arguments = [
+                    'list_id' => $listID,
+                    'count' => $count,
+                    'include_rts' => true,
+                    'tweet_mode' => 'extended'
+                ];
+                $connection = $this->getConnection();
+                $response = $connection->get('lists/statuses', $arguments);
 
-            // Parse all tweets
-            $tweets = ArrayList::create();
-            if ($response && is_array($response)) {
-                foreach ($response as $tweet) {
-                    $tweets->push(new Tweet($tweet));
+                // Parse all tweets
+                $tweets = ArrayList::create();
+                if ($response && is_array($response)) {
+                    foreach ($response as $tweet) {
+                        $tweets->push(new Tweet($tweet));
+                    }
                 }
+
+                return $tweets;
+            } catch (Exception $e) {
+                // soft fail the twitter timeout exception
             }
         }
 
-        return $tweets;
+        return null;
     }
 
 
