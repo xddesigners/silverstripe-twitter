@@ -8,6 +8,7 @@ SilverStripe\Core\Injector\Injector:
     factory: SilverStripe\Core\Cache\CacheFactory
     constructor:
       namespace: 'cachedTwitterService'
+      defaultLifetime: 300
 XD\Twitter\Extensions\TwitterExtension:
   dependencies:
     TwitterService: '%$XD\Twitter\Services\TwitterService'
@@ -18,5 +19,5 @@ SilverStripe\SiteConfig\SiteConfig:
   extensions:
     - XD\Twitter\Extensions\TwitterSiteConfig
 XD\Twitter\Services\CachedTwitterService:
-# Lifetime in seconds of cache
+  # Lifetime in seconds of cache
   lifetime: 300
